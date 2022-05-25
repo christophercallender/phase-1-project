@@ -1,52 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
-   //==========assign variables to navigation buttons==========//
-   let appleCore = document.querySelector('body > nav > a');
-   let mac = document.querySelector('body > nav > ul > li:nth-child(1) > a');
-   let iMac = document.querySelector('body > nav > ul > li:nth-child(2) > a');
-   let macBook = document.querySelector(
-      'body > nav > ul > li:nth-child(3) > a'
-   );
-   let iPad = document.querySelector('body > nav > ul > li:nth-child(4) > a');
-   let iPhone = document.querySelector('body > nav > ul > li:nth-child(5) > a');
-   let appleWatch = document.querySelector(
-      'body > nav > ul > li:nth-child(6) > a'
-   );
-   let heart = document.querySelector('body > nav > ul > li:nth-child(7) > a');
-   let signUp = document.querySelector('body > nav > ul > li:nth-child(8) > a');
-   let signIn = document.querySelector('body > nav > ul > li:nth-child(9) > a');
+   function addNavigationListeners() {
+      //==========assign variables to navigation buttons==========//
+      let appleCore = document.querySelector('body > nav > a');
+      let mac = document.querySelector('body > nav > ul > li:nth-child(1) > a');
+      let iMac = document.querySelector(
+         'body > nav > ul > li:nth-child(2) > a'
+      );
+      let macBook = document.querySelector(
+         'body > nav > ul > li:nth-child(3) > a'
+      );
+      let iPad = document.querySelector(
+         'body > nav > ul > li:nth-child(4) > a'
+      );
+      let iPhone = document.querySelector(
+         'body > nav > ul > li:nth-child(5) > a'
+      );
+      let appleWatch = document.querySelector(
+         'body > nav > ul > li:nth-child(6) > a'
+      );
+      let heart = document.querySelector(
+         'body > nav > ul > li:nth-child(7) > a'
+      );
+      let signUp = document.querySelector(
+         'body > nav > ul > li:nth-child(8) > a'
+      );
+      let signIn = document.querySelector(
+         'body > nav > ul > li:nth-child(9) > a'
+      );
+      let search = document.querySelector(
+         'body > nav > ul > li:nth-child(10) > form'
+      );
 
-   //==========add click event listeners to navigation buttons==========//
-   appleCore.addEventListener('click', () => {
-      //==========parameters: search keyword, in title(1), series(3) or model(5))==========//
-      showSelected();
-   });
-   mac.addEventListener('click', () => {
-      showSelected('Mac ', 3);
-   });
-   iMac.addEventListener('click', () => {
-      showSelected('iMac', 3);
-   });
-   macBook.addEventListener('click', () => {
-      showSelected('MacBook', 3);
-   });
-   iPad.addEventListener('click', () => {
-      showSelected('iPad', 5);
-   });
-   iPhone.addEventListener('click', () => {
-      showSelected('iPhone', 5);
-   });
-   appleWatch.addEventListener('click', () => {
-      showSelected('Watch', 1);
-   });
-   heart.addEventListener('click', () => {
-      showHearts();
-   });
-   signUp.addEventListener('click', () => {
-      showSignUp();
-   });
-   signIn.addEventListener('click', () => {
-      showSignIn();
-   });
+      //==========add click event listeners to navigation buttons==========//
+      //==========search keyword, in title(1), series(3) or model(5))==========//
+      appleCore.addEventListener('click', () => {
+         activeMain();
+         showSelected();
+         addNavigationListeners();
+      });
+      mac.addEventListener('click', () => {
+         activeMac();
+         showSelected('Mac ', 3);
+         addNavigationListeners();
+      });
+      iMac.addEventListener('click', () => {
+         activeiMac();
+         showSelected('iMac', 3);
+         addNavigationListeners();
+      });
+      macBook.addEventListener('click', () => {
+         activeMacBook();
+         showSelected('MacBook', 3);
+         addNavigationListeners();
+      });
+      iPad.addEventListener('click', () => {
+         activeiPad();
+         showSelected('iPad', 5);
+         addNavigationListeners();
+      });
+      iPhone.addEventListener('click', () => {
+         activeiPhone();
+         showSelected('iPhone', 5);
+         addNavigationListeners();
+      });
+      appleWatch.addEventListener('click', () => {
+         activeWatch();
+         showSelected('Watch', 1);
+         addNavigationListeners();
+      });
+      heart.addEventListener('click', () => {
+         activeHeart();
+         showHearts();
+         addNavigationListeners();
+      });
+      signUp.addEventListener('click', () => {
+         activeSignUp();
+         showSignUp();
+         addNavigationListeners();
+      });
+      signIn.addEventListener('click', () => {
+         activeSignIn();
+         showSignIn();
+         addNavigationListeners();
+      });
+      search.addEventListener('submit', (e) => {
+         e.preventDefault();
+         e.target.search.value == 'Watch'
+            ? showSelected(`${e.target.search.value}`, 1)
+            : showSelected(`${e.target.search.value}`, 3);
+         search.reset();
+      });
+   }
+   addNavigationListeners();
 
    function showSelected(assignKeyword = null, keywordNode = null) {
       //==========empty cards list (when page loads or navigation button is clicked)==========//
@@ -114,9 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
                document.querySelector('#cardlist').appendChild(card);
             }
             //==========remove cards made from duplicate API data==========//
+            document.querySelector('#card9').remove();
+            document.querySelector('#card16').remove();
             document.querySelector('#card18').remove();
             document.querySelector('#card21').remove();
+            document.querySelector('#card24').remove();
             document.querySelector('#card29').remove();
+            document.querySelector('#card32').remove();
             //==========exit loop and sort cards alphabetically==========//
             sortProducts();
          })
@@ -128,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                //==========target text of i in keywordNode: title(1), series(3) or model(5)==========//
                let keyword =
                   document.querySelectorAll('.col')[i].childNodes[1]
-                     .childNodes[3].childNodes[`${keywordNode}`].innerText;
+                     .childNodes[3].childNodes[`${keywordNode}`].textContent;
                //==========if keyword (assigned by button click) is not found, remove parent node (card)==========//
                if (keyword.indexOf(`${assignKeyword}`) == -1) {
                   toRemove.push(document.querySelectorAll('.col')[i]);
@@ -137,6 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let i = 0; i < toRemove.length; i++) {
                toRemove[i].remove();
             }
+         })
+         .catch((error) => {
+            return error;
          });
    }
    showSelected();
